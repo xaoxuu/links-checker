@@ -98,7 +98,7 @@ export class IssueManager {
         return !exclude_labels.some(excludeLabel => issueLabels.includes(excludeLabel));
       });
       
-      logger('info', `经过[${exclude_labels}]过滤后还有${issues.length}个: ${filteredIssues.map(item => item.number).join(',')}`);
+      logger('info', `经过[${exclude_labels}]过滤后还有${filteredIssues.length}个: ${filteredIssues.map(item => item.number).join(',')}`);
       return filteredIssues;
     } catch (error) {
       logger('error', '获取issues失败');
@@ -123,5 +123,5 @@ export class IssueManager {
       handleError(error, `Error updating labels for issue #${issueNumber}`);
     }
   }
-  
+
 }
