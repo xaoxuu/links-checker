@@ -1,0 +1,58 @@
+name: 'Links Checker'
+description: 'Automated links checker.'
+author: 'xaoxuu'
+
+inputs:
+  # 通用
+  exclude_labels:
+    description: '排除标签，有这些标签的issue会跳过不进行检查'
+    required: false
+    default: '审核中, 白名单'
+  retry_times:
+    description: '重试次数'
+    required: false
+    default: '3'
+  accepted_codes:
+    description: '可接受的状态码，这些状态码不会被认为网站异常'
+    required: false
+    default: '200,201,202,203,204,205,206,300,301,302,303,304,307,308'
+  unreachable_label:
+    description: '无效标签：无法访问'
+    required: false
+    default: '无法访问'
+  github_token:
+    description: 'GitHub Token'
+    required: false
+    default: '${{ github.token }}'
+  # 检查器类型
+  checker:
+    description: '检查器类型'
+    required: false
+    default: 'reachability' # theme: 检查目标网站是否是对应主题, reachability: 检查目标网站是否可访问（状态码在accepted_codes中）
+  # 友链检查器配置
+  friend_checker_invalid_label:
+    description: '无效标签：友链无效'
+    required: false
+    default: '未添加友链'
+  # 主题检查器配置
+  theme_checker_meta_tag:
+    description: '主题检查器：meta标签选择器'
+    required: false
+    default: 'meta[theme-name="Stellar"]'
+  theme_checker_content_attr:
+    description: '主题检查器：内容属性'
+    required: false
+    default: 'content'
+  theme_checker_version_attr:
+    description: '主题检查器：主题版本属性名'
+    required: false
+    default: 'theme-version'
+  theme_checker_invalid_label:
+    description: '无效标签：主题无效'
+    required: false
+    default: '主题无效'
+  
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
