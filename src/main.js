@@ -170,8 +170,10 @@ async function processData() {
             labels = [...labels, `status:${checkResult.status}`];
           }
           if (checkResult.themeVersion) {
-            // 如果有主题版本号，就添加标签
-            labels = [...labels, checkResult.themeVersion];
+            // 先移除所有语义话版本号标签
+            labels = labels.filter(label =>!label.match(/^v?[\d.]+(?:-[\w.]+)?$/));
+            // 添加标签主题版本号
+            labels = [...labels, `v${checkResult.themeVersion}`];
           }
           if (checkResult.reachability === true) {
             // 移除所有无法访问的标签
