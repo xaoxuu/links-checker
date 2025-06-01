@@ -21,10 +21,6 @@ inputs:
     description: '无效标签：无法访问'
     required: false
     default: '无法访问'
-  github_token:
-    description: 'GitHub Token'
-    required: false
-    default: '${{ github.token }}'
   # 检查器类型
   checker:
     description: '检查器类型'

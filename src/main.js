@@ -140,7 +140,7 @@ async function checkSite(item) {
 async function processData() {
 
   try {
-    const githubToken = core.getInput('github_token') || process.env.GITHUB_TOKEN;
+    const githubToken = process.env.GITHUB_TOKEN;
     const issueManager = new IssueManager(githubToken);
     const validSites = await issueManager.getIssues(config.exclude_labels);
     logger('info', `Total sites to check: ${validSites.length}`);
@@ -151,10 +151,16 @@ async function processData() {
     const checkPromises = validSites.map(item => {
       return pool.add(async () => {
         try {
-          logger('info', `#${item.number} Checking site: ${item.url}`);
+          const url = issue.body?.match(/"url":\s*"([^"]+)"/)?.at(1);
+          item.url = url;
+          if (!url) {
+            logger('warn', `#${item.number} No url found in issue body`);
+            return;
+          }
+          logger('info', `#${item.number} Checking site: ${url}`);
           const checkSiteWithRetry = () => checkSite(item);
           const checkResult = await withRetry(checkSiteWithRetry, config.retry_times);
-          logger('info', `#${item.number} Checked site: ${item.url} checkResult: ${JSON.stringify(checkResult)}`);
+          logger('info', `#${item.number} Checked site: ${url} checkResult: ${JSON.stringify(checkResult)}`);
           let labels = item.labels.map(label => label.name);
           if (checkResult.status === 200) {
             // 如果状态码为200，就移除所有status:开头的标签
@@ -195,8 +201,8 @@ async function processData() {
           await issueManager.updateIssueLabels(item.number, labels);
           logger('info', `Finished checking site for issue #${item.number}, checkResult: ${JSON.stringify(checkResult)}`);
         } catch (error) {
-          errors.push({ issue: item.number, url: item.url, error: error.message });
-          logger('error', `#${item.number} Error processing site ${item.url} ${error.message}`);
+          errors.push({ issue: item.number, error: error.message });
+          logger('error', `#${item.number} Error processing site ${error.message}`);
         }
       });
     });

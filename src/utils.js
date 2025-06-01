@@ -76,7 +76,6 @@ export class IssueManager {
 
   async getIssues(exclude_labels) {
     const { owner, repo } = github.context.repo;
-    
     try {
       // 使用 paginate 方法一次性获取所有 issues
       const issues = await this.octokit.paginate(this.octokit.issues.listForRepo, {
@@ -87,25 +86,22 @@ export class IssueManager {
         sort: 'created',
         direction: 'desc'
       });
-      logger('info', `Fetched ${issues.length} issues`, issues.map(item => item.number).join(','));
+      logger('info', `一共有${issues.length}个打开的issues: ${issues.map(item => item.number).join(',')}`);
+
+      if (!exclude_labels || exclude_labels.length === 0) {
+        return issues;
+      }
+
       // 过滤掉包含 exclude_labels 中定义的标签的 Issue
       const filteredIssues = issues.filter(issue => {
         const issueLabels = issue.labels.map(label => label.name);
         return !exclude_labels.some(excludeLabel => issueLabels.includes(excludeLabel));
       });
       
-      logger('info', `Filtered(${exclude_labels}) ${issues.length}`, filteredIssues.map(item => item.number).join(','));
-      return filteredIssues.map(issue => ({
-        url: issue.body?.match(/"url":\s*"([^"]+)"/)?.at(1),
-        number: issue.number,
-        labels: issue.labels.map(label => ({
-          name: label.name,
-          color: label.color
-        })),
-        body: issue.body
-      })).filter(item => item.url);
+      logger('info', `经过[${exclude_labels}]过滤后还有${issues.length}个: ${filteredIssues.map(item => item.number).join(',')}`);
+      return filteredIssues;
     } catch (error) {
-      handleError(error, 'Error fetching issues');
+      logger('error', '获取issues失败');
       throw error;
     }
   }
@@ -127,4 +123,5 @@ export class IssueManager {
       handleError(error, `Error updating labels for issue #${issueNumber}`);
     }
   }
+  
 }
