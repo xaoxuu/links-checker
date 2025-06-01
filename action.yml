@@ -11,7 +11,8 @@ inputs:
   retry_times:
     description: '重试次数'
     required: false
-    default: '3'
+    default: 3
+    type: integer
   accepted_codes:
     description: '可接受的状态码，这些状态码不会被认为网站异常'
     required: false
