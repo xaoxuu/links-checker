@@ -151,7 +151,7 @@ async function processData() {
     const checkPromises = validSites.map(item => {
       return pool.add(async () => {
         try {
-          const url = issue.body?.match(/"url":\s*"([^"]+)"/)?.at(1);
+          const url = item.body?.match(/"url":\s*"([^"]+)"/)?.at(1);
           item.url = url;
           if (!url) {
             logger('warn', `#${item.number} No url found in issue body`);
