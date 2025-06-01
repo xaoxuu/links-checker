@@ -45,9 +45,9 @@ inputs:
     required: false
     default: 'theme-version'
   theme_checker_invalid_label:
-    description: '无效标签：主题无效'
+    description: '无效标签：无效主题'
     required: false
-    default: '主题无效'
+    default: '无效主题'
   
 
 runs:

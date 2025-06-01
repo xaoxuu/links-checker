@@ -23,8 +23,8 @@ const config = {
   accepted_codes: core.getInput('accepted_codes') || '200,301',
 
   unreachable_label: core.getInput('unreachable_label') || '无法访问',
-  theme_checker_invalid_label: core.getInput('theme_checker_invalid_label') || '主题无效',
-  friend_checker_invalid_label: core.getInput('friend_checker_invalid_label') || '友链无效',
+  theme_checker_invalid_label: core.getInput('theme_checker_invalid_label') || '无效主题',
+  friend_checker_invalid_label: core.getInput('friend_checker_invalid_label') || '未添加友链',
   
   theme_checker_meta_tag: core.getInput('theme_checker_meta_tag') || 'meta[theme-name="Stellar"]',
   theme_checker_content_attr: core.getInput('theme_checker_content_attr') || 'content',
