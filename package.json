@@ -1,7 +1,7 @@
 {
-  "name": "friends-link-generator",
+  "name": "link-checker",
   "version": "1.0.0",
-  "description": "Friends Link Generator",
+  "description": "Link Checker",
   "scripts": {
     "build": "ncc build src/main.js -o dist --minify --license licenses.txt",    
     "prepare": "npm run build"
