@@ -74,7 +74,7 @@ export class IssueManager {
     });
   }
 
-  async getIssues(exclude_labels) {
+  async getIssues(exclude_issue_with_labels) {
     const { owner, repo } = github.context.repo;
     try {
       // 使用 paginate 方法一次性获取所有 issues
@@ -88,17 +88,17 @@ export class IssueManager {
       });
       logger('info', `一共有${issues.length}个打开的issues: ${issues.map(item => item.number).join(',')}`);
 
-      if (!exclude_labels || exclude_labels.length === 0) {
+      if (!exclude_issue_with_labels || exclude_issue_with_labels.length === 0) {
         return issues;
       }
 
-      // 过滤掉包含 exclude_labels 中定义的标签的 Issue
+      // 过滤掉包含 exclude_issue_with_labels 中定义的标签的 Issue
       const filteredIssues = issues.filter(issue => {
         const issueLabels = issue.labels.map(label => label.name);
-        return !exclude_labels.some(excludeLabel => issueLabels.includes(excludeLabel));
+        return !exclude_issue_with_labels.some(excludeLabel => issueLabels.includes(excludeLabel));
       });
       
-      logger('info', `经过[${exclude_labels}]过滤后还有${filteredIssues.length}个: ${filteredIssues.map(item => item.number).join(',')}`);
+      logger('info', `经过[${exclude_issue_with_labels}]过滤后还有${filteredIssues.length}个: ${filteredIssues.map(item => item.number).join(',')}`);
       return filteredIssues;
     } catch (error) {
       logger('error', '获取issues失败');

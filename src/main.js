@@ -7,7 +7,7 @@ const config = {
   // 
   checker: core.getInput('checker') || 'friend',
   retry_times: parseInt(core.getInput('retry_times') || 3),
-  exclude_labels: (core.getInput('exclude_labels') || '审核中, 白名单').split(',').map(s => s.trim()),
+  exclude_issue_with_labels: (core.getInput('exclude_issue_with_labels') || '审核中, 白名单').split(',').map(s => s.trim()),
   // 站点检查设置
   // 定义常量
   MAX_CONCURRENT_REQUESTS: 5,
@@ -142,7 +142,7 @@ async function processData() {
   try {
     const githubToken = process.env.GITHUB_TOKEN;
     const issueManager = new IssueManager(githubToken);
-    const validSites = await issueManager.getIssues(config.exclude_labels);
+    const validSites = await issueManager.getIssues(config.exclude_issue_with_labels);
     logger('info', `Total sites to check: ${validSites.length}`);
     let errors = [];
     

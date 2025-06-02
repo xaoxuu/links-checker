@@ -35,7 +35,7 @@ jobs:
         uses: xaoxuu/links-checker@main
         with:
           checker: 'reachability'
-          exclude_labels: '审核中, 白名单, 缺少互动, 缺少文章' # 具有哪些标签的issue不进行检查
+          exclude_issue_with_labels: '审核中, 白名单, 缺少互动, 缺少文章' # 具有哪些标签的issue不进行检查
       # 检查完毕后重新生成一下JSON
       - name: Generate data.json
         uses: xaoxuu/issues2json@main
@@ -43,7 +43,7 @@ jobs:
           data_version: 'v2'
           data_path: '/v2/data.json'
           sort: 'created-desc' # 'created-desc'/'created-asc'/'updated-desc'/'updated-asc'
-          exclude_labels: '审核中, 无法访问, 缺少互动, 缺少文章, 风险网站' # 具有哪些标签的issue不生成到JSON中
+          exclude_issue_with_labels: '审核中, 无法访问, 缺少互动, 缺少文章, 风险网站' # 具有哪些标签的issue不生成到JSON中
       - name: Setup Git Config
         run: |
           git config --global user.name 'github-actions[bot]'
@@ -63,7 +63,7 @@ jobs:
 
 ### 通用配置
 
-- `exclude_labels`: (可选) 排除标签，带有这些标签的 issue 将跳过不进行检查。默认值: `'审核中, 白名单'`
+- `exclude_issue_with_labels`: (可选) 排除标签，带有这些标签的 issue 将跳过不进行检查。默认值: `'审核中, 白名单'`
 - `retry_times`: (可选) 重试次数。默认值: `'3'`
 - `accepted_codes`: (可选) 可接受的状态码，这些状态码不会被认为网站异常。默认值: `'200,201,202,203,204,205,206,300,301,302,303,304,307,308'`
 - `unreachable_label`: (可选) 无效标签：无法访问。默认值: `'无法访问'`

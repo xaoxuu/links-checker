@@ -4,7 +4,7 @@ author: 'xaoxuu'
 
 inputs:
   # 通用
-  exclude_labels:
+  exclude_issue_with_labels:
     description: '排除标签，有这些标签的issue会跳过不进行检查'
     required: false
     default: '审核中, 白名单'
