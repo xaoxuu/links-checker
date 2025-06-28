@@ -33,28 +33,14 @@ jobs:
       # 检查链接状态
       - name: Check Reachability
         uses: xaoxuu/links-checker@main
-        with:
-          checker: 'reachability'
+        with: # 全部可选
+          checker: 'reachability' # theme: 主题检查， reachability: 链接可访问性检查
           exclude_issue_with_labels: '审核中, 白名单, 缺少互动, 缺少文章' # 具有哪些标签的issue不进行检查
-      # 检查完毕后重新生成一下JSON
-      - name: Generate data.json
-        uses: xaoxuu/issues2json@main
-        with:
-          data_version: 'v2'
-          data_path: '/v2/data.json'
-          sort: 'created-desc' # 'created-desc'/'created-asc'/'updated-desc'/'updated-asc'
-          exclude_issue_with_labels: '审核中, 无法访问, 缺少互动, 缺少文章, 风险网站' # 具有哪些标签的issue不生成到JSON中
-      - name: Setup Git Config
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-      - name: Commit and Push to output branch
-        run: |
-          git fetch origin output || true
-          git checkout -B output
-          git add --all
-          git commit -m "Update data from issues" || echo "No changes to commit"
-          git push -f origin output
+          retry_times: 3 # 重试几次
+          accepted_codes: '200,201,202,203,204,205,206,300,301,302,303,304,307,308' # 哪些状态码可以接受（认为可访问）
+          unreachable_label: '无法访问' # 不能访问时，会贴上什么标签
+     
+      ... 接下来调用 issues2json 再生成一次数据
 ```
 
 ## 配置
